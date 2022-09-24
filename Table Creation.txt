@@ -1,0 +1,52 @@
+.open healthTracker.db
+
+create table USER(
+Username varchar(30) not null unique,
+Id int not null unique,
+primary key(Id)
+);
+
+create table WATER_HISTORY(
+User_Id int not null,
+Date date not null,
+Ounce_of_Water int,
+primary key(User_Id, Date)
+constraint Water_History_FK
+foreign key(User_Id) references USER(Id) on update cascade on delete cascade
+);
+
+create table WEIGHT_HISTORY(
+User_Id int not null,
+Date date not null,
+Weight int,
+primary key(User_Id, Date)
+constraint Weight_History_FK
+foreign key(User_Id) references USER(Id) on update cascade on delete cascade
+);
+
+create table MEAL_HISTORY(
+User_Id int not null,
+Date date not null,
+Timestamp time not null,
+Food_Name varchar(30),
+Calories int,
+Carbs double,
+Protein double,
+Fat double,
+primary key(User_Id, Date, Timestamp)
+constraint Meal_History_FK
+foreign key(User_Id) references USER(Id) on update cascade on delete cascade
+);
+
+create table EXERCISE_HISTORY(
+User_Id int not null,
+Date date not null,
+Set_Num int not null,
+Reps int,
+Exercise_Name varchar(40),
+Weight double,
+primary key(User_Id, Date, Set_Num)
+constraint Exercise_History_FK
+foreign key(User_Id) references USER(Id) on update cascade on delete cascade
+);
+

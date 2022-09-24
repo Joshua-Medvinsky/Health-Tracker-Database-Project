@@ -1,0 +1,46 @@
+/* Returns the max weight for each exercise, and when that max was achieved for a particular user. In this case, the user is ‘ILoveBamboo.’ */
+select Date, Exercise_Name, max(Weight) as Max_Weight
+from EXERCISE_HISTORY
+where User_Id = (select Id from USER where Username = 'ILoveBamboo')
+group by Exercise_Name;
+
+/* Finds the average calories and ounces of water consumed in the past 14 days for a specific user. In this case, the user is ‘ILovePandas’. */
+select avg(Calories) as Average_Calories, avg(Ounce_of_Water) as Average_Water_Intake_in_Ounce
+from MEAL_HISTORY as mh, WATER_HISTORY as wh 
+where mh.User_Id = (select Id from USER where Username = 'ILovePandas') and
+wh.User_Id = (select Id from USER where Username = 'ILovePandas') and
+mh.Date >= Date('now', '-14 day') and
+wh.Date >= Date('now', '-14 day');
+
+
+/* Determine how a user’s weight has changed over the past month. In this case, the user is ‘ILovePandas.’ */
+select 
+(select Weight from WEIGHT_HISTORY where User_Id = (select Id from USER where Username = 'ILovePandas') and Date = date('now'))
+-
+(select Weight from WEIGHT_HISTORY where User_Id = (select Id from USER where Username = 'ILovePandas') and Date = date('now', '-1 month')) 
+as Weight_Change_In_Last_Month;
+
+
+/* Calculates the total grams of protein a user consumed on a specified day. In this case, the user is ‘ILovePandas.’ Protein can be substituted with any other nutrient to find that nutrient’s total as well. */
+select sum(protein)
+from MEAL_HISTORY
+where User_Id = (select Id from USER where Username = 'ILovePandas') and Date = date('now', '-2 day');
+
+
+/* Finds the amount of times a specific user exercised in the last 7 days. In this case, the user is ‘ILovePandas’. */
+select count(distinct date) as Amount_of_Time_Exercised_in_the_Last_7_Days
+from EXERCISE_HISTORY
+where user_id = (select id from USER where Username = 'ILovePandas') and Date >= date('now', '-7 day');
+
+
+/* Finds the amount of time a specific user eats, two days ago. In this case the user is ‘ILovePandas’. */
+select count(Timestamp) as Amount_of_Time_Ate_2_Days_Ago
+from MEAL_HISTORY
+where User_Id = (select Id from USER where Username = 'ILovePandas') and Date = date('now', '-2 day');
+
+
+/* For a particular user, get the max weight that they lifted on each exercise on each day that they have an entry, in this case the user is ‘ILoveBamboo’. */
+select Date, Exercise_Name, max(Weight) as Max_Weight
+from EXERCISE_HISTORY
+where User_Id = (select Id from USER where Username = 'ILoveBamboo')
+group by Date, Exercise_Name;
